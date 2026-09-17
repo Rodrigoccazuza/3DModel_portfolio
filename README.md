@@ -1,17 +1,14 @@
-# Interactive 3D hero
+# Eye to Eye — interactive 3D hero v2
 
-A responsive hero section using the supplied `hero_head.glb`. The eyes track the pointer, the head follows with a slight delay, and scrolling adds a subtle turn and smile. Motion is reduced when the visitor requests reduced motion.
+This `hero-v2` branch contains a new hero design and the revised `hero_head_v2.glb` model. The eyes follow the pointer, the head follows more slowly, and scrolling brings in a smile. Reduced-motion preferences are respected.
 
 ## Run locally
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite. For a production build, run `npm run build`; the deployable files will be in `dist/`.
+Run `npm run build` to create the static site in `dist/`.
 
-Pushes to `main` build and publish `dist/` to GitHub Pages at
-https://rodrigoccazuza.github.io/3DModel_portfolio/.
-
-The included GLB is copied from the provided `web_hero` asset set. The site's copy and visual style are placeholders that you can adapt to your brand.
+GitHub Pages currently deploys `main` at https://rodrigoccazuza.github.io/3DModel_portfolio/. This branch is ready for review and can be merged to publish this version.

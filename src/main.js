@@ -3,7 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import './style.css';
 
 const canvas = document.querySelector('#portrait');
-const area = document.querySelector('.model-area');
+const area = document.querySelector('.portrait-stage');
 const hero = document.querySelector('.hero');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -18,11 +18,11 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.35;
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 
-scene.add(new THREE.HemisphereLight(0xe1f0e4, 0x46503f, 2.3));
-const key = new THREE.DirectionalLight(0xfff3dc, 3.2);
+scene.add(new THREE.HemisphereLight(0xf8f0db, 0x4f5e50, 2.2));
+const key = new THREE.DirectionalLight(0xfff5e8, 3.1);
 key.position.set(-2, 3, 4);
 scene.add(key);
-const rim = new THREE.DirectionalLight(0xb7db87, 2.8);
+const rim = new THREE.DirectionalLight(0xffba8a, 2.6);
 rim.position.set(2, 1, -2);
 scene.add(rim);
 
@@ -32,7 +32,7 @@ const clamp = THREE.MathUtils.clamp;
 const damp = THREE.MathUtils.damp;
 const clock = new THREE.Clock();
 
-new GLTFLoader().load(`${import.meta.env.BASE_URL}hero_head.glb`, (gltf) => {
+new GLTFLoader().load(`${import.meta.env.BASE_URL}hero_head_v2.glb`, (gltf) => {
   const portrait = gltf.scene;
   head = portrait.getObjectByName('CTRL_Head');
   eyeL = portrait.getObjectByName('CTRL_Eye_L');
@@ -52,7 +52,7 @@ function resize() {
   const height = area.clientHeight;
   camera.aspect = width / height;
   // Bring the portrait forward on narrow screens without cropping the face.
-  camera.position.z = width < 550 ? 2.12 : 2.4;
+  camera.position.z = width < 550 ? 2.15 : 2.4;
   camera.updateProjectionMatrix();
   renderer.setSize(width, height, false);
 }

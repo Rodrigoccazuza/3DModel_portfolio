@@ -3,49 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#101511" />
-    <title>Look Closer — Interactive 3D Hero</title>
+    <meta name="theme-color" content="#f3f0e8" />
+    <title>Eye to Eye — Interactive Portrait</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div class="site-shell">
-      <header class="topbar">
-        <a class="mark" href="#top" aria-label="Look Closer home"><span class="mark-symbol">✳</span><span>STUDIO / 01</span></a>
-        <span class="topbar-note">INTERACTIVE EXPERIMENT — 2026</span>
-        <a class="topbar-link" href="#about">ABOUT THE IDEA <span aria-hidden="true">↗</span></a>
-      </header>
+    <header class="site-header">
+      <a class="identity" href="#top" aria-label="Eye to Eye home"><span class="asterisk" aria-hidden="true">✳</span> FORM / FEELING</a>
+      <span class="header-center">AN INTERACTIVE PORTRAIT</span>
+      <a class="header-action" href="#story">THE STORY <span aria-hidden="true">↗</span></a>
+    </header>
 
-      <main id="top">
-        <section class="hero" aria-labelledby="hero-title">
-          <div class="hero-copy">
-            <p class="eyebrow"><span class="eyebrow-line"></span> A LITTLE MORE HUMAN</p>
-            <h1 id="hero-title">LOOK<br /><em>CLOSER.</em></h1>
-            <p class="intro">Meet a face that meets you back. Move your cursor, take your time, and see what happens.</p>
-            <a class="explore" href="#about"><span class="explore-icon" aria-hidden="true">↘</span><span>SCROLL TO EXPLORE</span></a>
-          </div>
+    <main id="top">
+      <section class="hero" aria-labelledby="title">
+        <div class="hero-grain" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="kicker"><span class="kicker-dot"></span> SAY HELLO TO THE HUMAN SIDE</p>
+          <h1 id="title">EYE<br />TO <span>EYE.</span></h1>
+          <p class="lead">An encounter that looks back. Move your cursor to catch his eye, then scroll to see him smile.</p>
+          <a class="scroll-cue" href="#story"><span class="arrow" aria-hidden="true">↓</span> KEEP LOOKING</a>
+        </div>
 
-          <div class="model-area" aria-label="Interactive 3D portrait whose eyes follow the pointer">
-            <div class="model-halo"></div>
-            <canvas id="portrait" aria-hidden="true"></canvas>
-            <div class="model-caption"><span class="live-dot"></span> CURSOR REACTIVE / SCROLL RESPONSIVE</div>
-          </div>
+        <div class="portrait-stage" aria-label="Interactive 3D portrait with eyes that follow the pointer">
+          <div class="stage-disc"></div>
+          <div class="stage-ring stage-ring-one"></div>
+          <div class="stage-ring stage-ring-two"></div>
+          <canvas id="portrait" aria-hidden="true"></canvas>
+          <span class="stage-coordinate coordinate-top">01 / REAL TIME</span>
+          <span class="stage-coordinate coordinate-bottom">POINTER → GAZE</span>
+        </div>
 
-          <div class="hero-index" aria-hidden="true">01 <span>/</span> 02</div>
-          <div class="side-label" aria-hidden="true">MOVE THE CURSOR · MEET THE GAZE</div>
-        </section>
+        <div class="hero-bottom"><span>DESIGNED TO FEEL ALIVE</span><span>© 2026 — 01/02</span></div>
+      </section>
 
-        <section class="about" id="about" aria-labelledby="about-title">
-          <div class="about-number">02 / THE EXPERIENCE</div>
-          <div class="about-body">
-            <h2 id="about-title">A face with<br /><em>presence.</em></h2>
-            <p>Small gestures make digital spaces feel alive. The eyes follow your movement, the head responds with a little delay, and the expression changes as you explore.</p>
-          </div>
-          <a class="back-link" href="#top">BACK TO TOP ↑</a>
-        </section>
-      </main>
-    </div>
+      <section class="story" id="story" aria-labelledby="story-title">
+        <div class="story-overline">02 / A SMALL CONNECTION</div>
+        <div class="story-main">
+          <h2 id="story-title">HELLO,<br /><span>THERE.</span></h2>
+          <p>The smallest response can make a screen feel more human. A glance follows your movement; a smile appears as you stay a little longer.</p>
+          <a href="#top" class="back-top">MEET AGAIN <span aria-hidden="true">↑</span></a>
+        </div>
+        <div class="story-asterisk" aria-hidden="true">✳</div>
+      </section>
+    </main>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
