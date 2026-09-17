@@ -42,9 +42,11 @@ new GLTFLoader().load(`${import.meta.env.BASE_URL}hero_head_v2.glb`, (gltf) => {
   // The supplied preview animation controls these same bones. This page drives them directly.
   scene.add(portrait);
   resize();
+  renderer.render(scene, camera);
+  area.classList.add('model-ready');
 }, undefined, (error) => {
   console.error('Unable to load the portrait model:', error);
-  area.insertAdjacentHTML('beforeend', '<p class="load-error">The 3D portrait could not load.</p>');
+  area.querySelector('.model-loading').textContent = 'PORTRAIT PREVIEW';
 });
 
 function resize() {
