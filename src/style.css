@@ -105,13 +105,12 @@ a { color: inherit; text-decoration: none; }
   cursor: crosshair;
 }
 #portrait {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   display: block;
-  opacity: 0;
-  transition: opacity .25s ease;
 }
-.model-ready #portrait { opacity: 1; }
 .model-ready .model-loading { opacity: 0; pointer-events: none; }
 .model-loading {
   position: absolute;
@@ -193,5 +192,5 @@ a { color: inherit; text-decoration: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .arrow, #portrait { transition: none; }
+  .arrow { transition: none; }
 }

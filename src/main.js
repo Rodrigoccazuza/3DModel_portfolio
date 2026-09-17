@@ -14,7 +14,7 @@ camera.lookAt(0, 0.49, 0);
 
 let renderer;
 try {
-  renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+  renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
 } catch (error) {
   area.querySelector('.model-loading').textContent = '3D IS UNAVAILABLE IN THIS BROWSER';
   throw error;
@@ -22,7 +22,13 @@ try {
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.35;
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+canvas.addEventListener('webglcontextlost', (event) => {
+  event.preventDefault();
+  area.classList.remove('model-ready');
+  area.dataset.modelState = 'context-lost';
+  area.querySelector('.model-loading').textContent = '3D RENDERING STOPPED — RELOAD THIS PAGE';
+});
 
 scene.add(new THREE.HemisphereLight(0xf8f0db, 0x4f5e50, 2.2));
 const key = new THREE.DirectionalLight(0xfff5e8, 3.1);
@@ -35,6 +41,7 @@ scene.add(rim);
 let modelRoot, head, eyeL, eyeR, face, smileIndex;
 let mx = 0, my = 0, scroll = 0;
 let isHovering = false;
+let validationFrames = 0;
 const clamp = THREE.MathUtils.clamp;
 const damp = THREE.MathUtils.damp;
 const clock = new THREE.Clock();
@@ -54,17 +61,15 @@ new GLTFLoader().load(`${import.meta.env.BASE_URL}portrait-interactive.glb`, (gl
   scene.add(modelRoot);
   if (!reducedMotion.matches) head.rotation.y = -0.22;
   resize();
-  renderer.render(scene, camera);
-  area.classList.add('model-ready');
-  area.dataset.modelState = 'interactive';
+  area.dataset.modelState = 'rendering';
 }, undefined, (error) => {
   console.error('Unable to load the portrait model:', error);
   area.querySelector('.model-loading').textContent = '3D MODEL COULD NOT LOAD';
 });
 
 function resize() {
-  const width = area.clientWidth;
-  const height = area.clientHeight;
+  const width = Math.max(area.clientWidth, 1);
+  const height = Math.max(area.clientHeight, 1);
   camera.aspect = width / height;
   // Bring the portrait forward on narrow screens without cropping the face.
   camera.position.z = width < 550 ? 2.15 : 2.4;
@@ -72,6 +77,13 @@ function resize() {
   renderer.setSize(width, height, false);
 }
 new ResizeObserver(resize).observe(area);
+
+function portraitIsVisibleInBuffer() {
+  const gl = renderer.getContext();
+  const pixel = new Uint8Array(4);
+  gl.readPixels(Math.floor(canvas.width / 2), Math.floor(canvas.height / 2), 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixel);
+  return pixel[3] > 0;
+}
 
 function trackPointer(clientX, clientY) {
   const rect = hero.getBoundingClientRect();
@@ -132,6 +144,24 @@ function animate() {
     }
   }
   renderer.render(scene, camera);
+  if (modelRoot && !area.classList.contains('model-ready') && area.dataset.modelState !== 'context-lost') {
+    validationFrames += 1;
+    if (validationFrames % 8 === 0) {
+      try {
+        if (portraitIsVisibleInBuffer()) {
+          area.classList.add('model-ready');
+          area.dataset.modelState = 'interactive';
+        } else if (validationFrames >= 120) {
+          area.dataset.modelState = 'render-failed';
+          area.querySelector('.model-loading').textContent = '3D DID NOT RENDER IN THIS BROWSER';
+        }
+      } catch (error) {
+        area.dataset.modelState = 'render-failed';
+        area.querySelector('.model-loading').textContent = '3D RENDERING FAILED IN THIS BROWSER';
+        console.error('Portrait framebuffer check failed:', error);
+      }
+    }
+  }
 }
 resize();
 animate();
