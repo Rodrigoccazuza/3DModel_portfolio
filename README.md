@@ -11,4 +11,7 @@ npm run dev
 
 Open the local URL printed by Vite. For a production build, run `npm run build`; the deployable files will be in `dist/`.
 
+Pushes to `main` build and publish `dist/` to GitHub Pages at
+https://rodrigoccazuza.github.io/3DModel_portfolio/.
+
 The included GLB is copied from the provided `web_hero` asset set. The site's copy and visual style are placeholders that you can adapt to your brand.
