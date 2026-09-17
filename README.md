@@ -11,4 +11,4 @@ npm run dev
 
 Run `npm run build` to create the static site in `dist/`.
 
-GitHub Pages currently deploys `main` at https://rodrigoccazuza.github.io/3DModel_portfolio/. This branch is ready for review and can be merged to publish this version.
+Pushes to `hero-v2` build and publish `dist/` to GitHub Pages at https://rodrigoccazuza.github.io/3DModel_portfolio/.
