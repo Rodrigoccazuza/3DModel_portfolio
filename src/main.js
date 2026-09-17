@@ -8,13 +8,14 @@ const hero = document.querySelector('.hero');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
 const scene = new THREE.Scene();
+scene.background = new THREE.Color('#f3f0e8');
 const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
 camera.position.set(0, 0.51, 2.4);
 camera.lookAt(0, 0.49, 0);
 
 let renderer;
 try {
-  renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer = new THREE.WebGLRenderer({ canvas, alpha: false, antialias: true, preserveDrawingBuffer: true });
 } catch (error) {
   area.querySelector('.model-loading').textContent = '3D IS UNAVAILABLE IN THIS BROWSER';
   throw error;
@@ -82,7 +83,7 @@ function portraitIsVisibleInBuffer() {
   const gl = renderer.getContext();
   const pixel = new Uint8Array(4);
   gl.readPixels(Math.floor(canvas.width / 2), Math.floor(canvas.height / 2), 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixel);
-  return pixel[3] > 0;
+  return Math.abs(pixel[0] - 243) + Math.abs(pixel[1] - 240) + Math.abs(pixel[2] - 232) > 35;
 }
 
 function trackPointer(clientX, clientY) {
