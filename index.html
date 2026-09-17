@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101511" />
+    <title>Look Closer — Interactive 3D Hero</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="mark" href="#top" aria-label="Look Closer home"><span class="mark-symbol">✳</span><span>STUDIO / 01</span></a>
+        <span class="topbar-note">INTERACTIVE EXPERIMENT — 2026</span>
+        <a class="topbar-link" href="#about">ABOUT THE IDEA <span aria-hidden="true">↗</span></a>
+      </header>
+
+      <main id="top">
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-line"></span> A LITTLE MORE HUMAN</p>
+            <h1 id="hero-title">LOOK<br /><em>CLOSER.</em></h1>
+            <p class="intro">Meet a face that meets you back. Move your cursor, take your time, and see what happens.</p>
+            <a class="explore" href="#about"><span class="explore-icon" aria-hidden="true">↘</span><span>SCROLL TO EXPLORE</span></a>
+          </div>
+
+          <div class="model-area" aria-label="Interactive 3D portrait whose eyes follow the pointer">
+            <div class="model-halo"></div>
+            <canvas id="portrait" aria-hidden="true"></canvas>
+            <div class="model-caption"><span class="live-dot"></span> CURSOR REACTIVE / SCROLL RESPONSIVE</div>
+          </div>
+
+          <div class="hero-index" aria-hidden="true">01 <span>/</span> 02</div>
+          <div class="side-label" aria-hidden="true">MOVE THE CURSOR · MEET THE GAZE</div>
+        </section>
+
+        <section class="about" id="about" aria-labelledby="about-title">
+          <div class="about-number">02 / THE EXPERIENCE</div>
+          <div class="about-body">
+            <h2 id="about-title">A face with<br /><em>presence.</em></h2>
+            <p>Small gestures make digital spaces feel alive. The eyes follow your movement, the head responds with a little delay, and the expression changes as you explore.</p>
+          </div>
+          <a class="back-link" href="#top">BACK TO TOP ↑</a>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
