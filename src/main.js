@@ -12,7 +12,13 @@ const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
 camera.position.set(0, 0.51, 2.4);
 camera.lookAt(0, 0.49, 0);
 
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+} catch (error) {
+  area.querySelector('.model-loading').textContent = '3D IS UNAVAILABLE IN THIS BROWSER';
+  throw error;
+}
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.35;
@@ -41,12 +47,14 @@ new GLTFLoader().load(`${import.meta.env.BASE_URL}hero_head_v2.glb`, (gltf) => {
   smileIndex = face?.morphTargetDictionary?.smile;
   // The supplied preview animation controls these same bones. This page drives them directly.
   scene.add(portrait);
+  if (!reducedMotion.matches) head.rotation.y = -0.22;
   resize();
   renderer.render(scene, camera);
   area.classList.add('model-ready');
+  area.dataset.modelState = 'interactive';
 }, undefined, (error) => {
   console.error('Unable to load the portrait model:', error);
-  area.querySelector('.model-loading').textContent = 'PORTRAIT PREVIEW';
+  area.querySelector('.model-loading').textContent = '3D MODEL COULD NOT LOAD';
 });
 
 function resize() {
@@ -60,12 +68,25 @@ function resize() {
 }
 new ResizeObserver(resize).observe(area);
 
+function trackPointer(clientX, clientY) {
+  const rect = hero.getBoundingClientRect();
+  mx = clamp(((clientX - rect.left) / rect.width - 0.5) * 2.4, -1, 1);
+  my = clamp(((clientY - rect.top) / rect.height - 0.5) * 2.2, -1, 1);
+  area.dataset.gaze = `${mx.toFixed(2)},${my.toFixed(2)}`;
+}
 window.addEventListener('pointermove', (event) => {
   if (event.pointerType === 'touch') return;
-  const rect = hero.getBoundingClientRect();
-  mx = clamp(((event.clientX - rect.left) / rect.width - 0.5) * 2, -1, 1);
-  my = clamp(((event.clientY - rect.top) / rect.height - 0.5) * 2, -1, 1);
+  trackPointer(event.clientX, event.clientY);
 }, { passive: true });
+hero.addEventListener('touchstart', (event) => {
+  const touch = event.touches[0];
+  if (touch) trackPointer(touch.clientX, touch.clientY);
+}, { passive: true });
+hero.addEventListener('touchmove', (event) => {
+  const touch = event.touches[0];
+  if (touch) trackPointer(touch.clientX, touch.clientY);
+}, { passive: true });
+hero.addEventListener('touchend', () => { mx = 0; my = 0; }, { passive: true });
 window.addEventListener('pointerleave', () => { mx = 0; my = 0; });
 window.addEventListener('scroll', () => {
   const rect = hero.getBoundingClientRect();
@@ -76,7 +97,8 @@ function animate() {
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), 0.05);
   if (head && eyeL && eyeR) {
-    const motion = reducedMotion.matches ? 0 : 1;
+    // Reduced motion keeps intentional input available with a smaller range.
+    const motion = reducedMotion.matches ? 0.55 : 1;
     const gazeX = mx * motion;
     const gazeY = my * motion;
     // Eye movement leads; head movement follows more slowly. Scroll adds a small turn.
@@ -86,8 +108,8 @@ function animate() {
       eye.rotation.x = damp(eye.rotation.x, eyePitch, 9, dt);
       eye.rotation.y = damp(eye.rotation.y, eyeYaw, 9, dt);
     }
-    head.rotation.x = damp(head.rotation.x, gazeY * 0.16 + scroll * 0.12 * motion, 3, dt);
-    head.rotation.y = damp(head.rotation.y, gazeX * 0.28 + scroll * 0.20 * motion, 3, dt);
+    head.rotation.x = damp(head.rotation.x, gazeY * 0.22 + scroll * 0.12 * motion, 4, dt);
+    head.rotation.y = damp(head.rotation.y, gazeX * 0.42 + scroll * 0.20 * motion, 4, dt);
     head.rotation.z = damp(head.rotation.z, -gazeX * 0.055, 3, dt);
     if (face && smileIndex !== undefined) {
       face.morphTargetInfluences[smileIndex] = damp(face.morphTargetInfluences[smileIndex], scroll * 0.8 * motion, 2.5, dt);
