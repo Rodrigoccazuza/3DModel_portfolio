@@ -1,6 +1,6 @@
 # Eye to Eye — interactive 3D hero v2
 
-This `hero-v2` branch contains a new hero design and the revised `hero_head_v2.glb` model. The eyes follow the pointer, the head follows more slowly, and scrolling brings in a smile. Reduced-motion preferences are respected.
+This `hero-v2` branch contains a new hero design and the revised `portrait-interactive.glb` model. The eyes follow the pointer or a touch drag, the head responds on hover, and scrolling brings in a smile. Reduced-motion preferences are respected.
 
 ## Run locally
 

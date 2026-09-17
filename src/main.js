@@ -32,21 +32,26 @@ const rim = new THREE.DirectionalLight(0xffba8a, 2.6);
 rim.position.set(2, 1, -2);
 scene.add(rim);
 
-let head, eyeL, eyeR, face, smileIndex;
+let modelRoot, head, eyeL, eyeR, face, smileIndex;
 let mx = 0, my = 0, scroll = 0;
+let isHovering = false;
 const clamp = THREE.MathUtils.clamp;
 const damp = THREE.MathUtils.damp;
 const clock = new THREE.Clock();
 
-new GLTFLoader().load(`${import.meta.env.BASE_URL}hero_head_v2.glb`, (gltf) => {
-  const portrait = gltf.scene;
-  head = portrait.getObjectByName('CTRL_Head');
-  eyeL = portrait.getObjectByName('CTRL_Eye_L');
-  eyeR = portrait.getObjectByName('CTRL_Eye_R');
-  face = portrait.getObjectByName('HeroHead_webMesh');
+new GLTFLoader().load(`${import.meta.env.BASE_URL}portrait-interactive.glb`, (gltf) => {
+  modelRoot = gltf.scene;
+  head = modelRoot.getObjectByName('CTRL_Head');
+  eyeL = modelRoot.getObjectByName('CTRL_Eye_L');
+  eyeR = modelRoot.getObjectByName('CTRL_Eye_R');
+  face = modelRoot.getObjectByName('HeroHead_webMesh');
+  if (!head || !eyeL || !eyeR) {
+    area.querySelector('.model-loading').textContent = '3D RIG COULD NOT LOAD';
+    return;
+  }
   smileIndex = face?.morphTargetDictionary?.smile;
   // The supplied preview animation controls these same bones. This page drives them directly.
-  scene.add(portrait);
+  scene.add(modelRoot);
   if (!reducedMotion.matches) head.rotation.y = -0.22;
   resize();
   renderer.render(scene, camera);
@@ -78,15 +83,24 @@ window.addEventListener('pointermove', (event) => {
   if (event.pointerType === 'touch') return;
   trackPointer(event.clientX, event.clientY);
 }, { passive: true });
+area.addEventListener('pointerenter', (event) => {
+  if (event.pointerType === 'touch') return;
+  isHovering = true;
+  trackPointer(event.clientX, event.clientY);
+});
+area.addEventListener('pointerleave', () => { isHovering = false; });
 hero.addEventListener('touchstart', (event) => {
   const touch = event.touches[0];
-  if (touch) trackPointer(touch.clientX, touch.clientY);
+  if (touch) {
+    isHovering = true;
+    trackPointer(touch.clientX, touch.clientY);
+  }
 }, { passive: true });
 hero.addEventListener('touchmove', (event) => {
   const touch = event.touches[0];
   if (touch) trackPointer(touch.clientX, touch.clientY);
 }, { passive: true });
-hero.addEventListener('touchend', () => { mx = 0; my = 0; }, { passive: true });
+hero.addEventListener('touchend', () => { mx = 0; my = 0; isHovering = false; }, { passive: true });
 window.addEventListener('pointerleave', () => { mx = 0; my = 0; });
 window.addEventListener('scroll', () => {
   const rect = hero.getBoundingClientRect();
@@ -97,6 +111,8 @@ function animate() {
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), 0.05);
   if (head && eyeL && eyeR) {
+    const targetScale = isHovering ? (reducedMotion.matches ? 1.035 : 1.09) : 1;
+    modelRoot.scale.setScalar(damp(modelRoot.scale.x, targetScale, 6, dt));
     // Reduced motion keeps intentional input available with a smaller range.
     const motion = reducedMotion.matches ? 0.55 : 1;
     const gazeX = mx * motion;

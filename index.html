@@ -8,8 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="preload" href="./hero_preview.jpg" as="image" />
-    <link rel="preload" href="./hero_head_v2.glb" as="fetch" crossorigin />
+    <link rel="preload" href="./portrait-interactive.glb" as="fetch" crossorigin />
   </head>
   <body>
     <header class="site-header">
@@ -24,15 +23,11 @@
         <div class="hero-content">
           <p class="kicker"><span class="kicker-dot"></span> SAY HELLO TO THE HUMAN SIDE</p>
           <h1 id="title">EYE<br />TO <span>EYE.</span></h1>
-          <p class="lead">An encounter that looks back. Move your cursor to catch his eye, then scroll to see him smile.</p>
+          <p class="lead">An encounter that looks back. Move your cursor or drag a finger to catch his eye, then scroll to see him smile.</p>
           <a class="scroll-cue" href="#story"><span class="arrow" aria-hidden="true">↓</span> KEEP LOOKING</a>
         </div>
 
         <div class="portrait-stage" aria-label="Interactive 3D portrait with eyes that follow the pointer">
-          <div class="stage-disc"></div>
-          <div class="stage-ring stage-ring-one"></div>
-          <div class="stage-ring stage-ring-two"></div>
-          <img class="portrait-poster" src="./hero_preview.jpg" alt="" aria-hidden="true" />
           <canvas id="portrait" aria-hidden="true"></canvas>
           <span class="model-loading" role="status">LOADING INTERACTIVE PORTRAIT</span>
           <span class="stage-coordinate coordinate-top">01 / REAL TIME</span>
